@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>plz work, i beg</title>
+  <style>
+    /* Resize images in the specified sections */
+    .output img, 
+    .sign-language img, 
+    .hieroglyphs img, 
+    .a1z26 img, 
+    .atbash img, 
+    .caesar img, 
+    .bacon img {
+      height: 10px;  /* Adjust the size of these icons */
+    }
+    
+    /* Your existing styles */
+    body, html {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      cursor: grab;
+    }
 
+    .panorama-container {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .panorama-container img {
+      position: absolute;
+      height: 100%;
+      width: auto;
+      left: 0;
+      top: 0;
+      user-drag: none;  /* Prevent image dragging */
+      user-select: none; /* Prevent selecting the image */
+      pointer-events: none; /* Disable image pointer events */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="panorama-container">
+    <img id="panorama" src="https://raw.githubusercontent.com/FreddieThePebble/2024-Studio360Tour/main/Images/Capture1.jpeg" alt="360 Panorama">
+  </div>
+
+  <script>
+    const panorama = document.getElementById('panorama');
+    let isDragging = false;
+    let startX, scrollLeft;
+
+    panorama.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.pageX - panorama.offsetLeft;  
+      scrollLeft = panorama.style.transform ? parseInt(panorama.style.transform.replace('translateX(', '').replace('px)', '')) : 0;
+      panorama.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      panorama.style.cursor = 'grab';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const x = e.pageX - startX;  
+      const moveAmount = scrollLeft + x;
+      panorama.style.transform = `translateX(${moveAmount}px)`;
+    });
+
+    panorama.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].pageX - panorama.offsetLeft;
+      scrollLeft = panorama.style.transform ? parseInt(panorama.style.transform.replace('translateX(', '').replace('px)', '')) : 0;
+      isDragging = true;
+    });
+
+    panorama.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    panorama.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const x = e.touches[0].pageX - startX;
+      const moveAmount = scrollLeft + x;
+      panorama.style.transform = `translateX(${moveAmount}px)`;
+    });
+  </script>
+
+</body>
+</html>
